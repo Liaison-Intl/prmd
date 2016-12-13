@@ -45,7 +45,7 @@
         end
         attributes.concat(nested)
 
-      elsif array_with_nested_objects?(value['items'])
+      elsif array_with_nested_objects?(value['items']) || is_nullable_array?(value)
         if value['items']['properties']
           nested = extract_attributes(schema, value['items']['properties'])
           nested.each do |attribute|
@@ -196,5 +196,9 @@
   def array_with_nested_objects?(items)
     return unless items
     items['properties'] || items['oneOf']
+  end
+
+  def is_nullable_array?(value)
+    (value['items'] && value['type'].include?('null'))
   end
 %>
