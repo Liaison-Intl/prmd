@@ -12,8 +12,8 @@ module Prmd
       },
       {
         title: "parent_required",
-        optional: {},
-        required: {"user:email" => "string", "user:name" => "string"}
+        optional: {"user:email" => "string", "user:name" => "string"},
+        required: {}
       },
       {
         title: "child_required",
@@ -22,10 +22,15 @@ module Prmd
       },
       {
         title: "multiple_nested_required" ,
-        optional: {"user:name" => "string"},
-        required: {"user:email" => "string",
+        optional: {"user:name" => "string",
                    "address:street" => "string",
-                   "address:zip" => "string"}
+                   "address:zip" => "string"},
+        required: {"user:email" => "string"}
+      },
+      {
+        title: "required_array_of_objects_with_optional_property" ,
+        optional: {"users:name" => "string"},
+        required: {"users:email" => "string"}
       }
     ].each do |test_hash|
 

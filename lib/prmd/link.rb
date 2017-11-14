@@ -3,7 +3,7 @@ require 'ostruct'
 module Prmd
   class Link
     def initialize(link_schema)
-      @link_schema = link_schema 
+      @link_schema = link_schema
     end
 
     def required_and_optional_parameters
@@ -20,7 +20,7 @@ module Prmd
       schema.properties.keys.each do |prop_name|
         prop = schema.properties[prop_name]
         pref = "#{prefix}#{prop_name}"
-        required = parent_required || schema.property_is_required?(prop_name)
+        required = schema.property_is_required?(prop_name)
 
         handle_property(prop, pref, required)
       end
@@ -30,6 +30,8 @@ module Prmd
       case
       when property_is_object?(property["type"])
         recurse_properties(Schema.new(property), "#{prefix}:", required)
+      when property_is_array_of_objects?(property)
+        recurse_properties(Schema.new(property["items"]), "#{prefix}:", required)
       else
         categorize_parameter(prefix, property, required)
       end
@@ -38,6 +40,12 @@ module Prmd
     def property_is_object?(type)
       return false unless type
       type == "object" || type.include?("object")
+    end
+
+    def property_is_array_of_objects?(property)
+      type = property["type"]
+      return false unless property && type
+      (type == "array" || type.include?("array")) && property["items"] && property_is_object?(property["items"]["type"])
     end
 
     def categorize_parameter(name, param,  required=false)

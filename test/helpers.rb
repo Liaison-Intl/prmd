@@ -177,4 +177,31 @@ module PrmdLinkTestHelpers
     }
 
   end
+
+  def link_required_array_of_objects_with_optional_property
+    {
+      "description"=>"Create users",
+      "href"=>"/users",
+      "method"=>"POST",
+      "rel"=>"create",
+      "schema"=> {
+        "properties"=>{
+          "users"=>{
+            "type"=>["array"],
+            "items" => {
+              "type" => ["object"],
+              "properties"=> {
+                "email"=>"string",
+                "name"=>"string"
+              },
+              "required" => ["email"]
+            }
+          }
+        },
+        "type"=>["object"],
+        "required" => ["users"]
+      },
+      "title"=>"Create"
+    }
+  end
 end
